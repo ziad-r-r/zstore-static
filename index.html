@@ -5,56 +5,367 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Zstore</title>
 <style>
+
 :root{--brown:#6F4E37;--brown2:#4a3425;--beige:#E8DCC8;--off:#FBF8F2;--text:#2b2118;--muted:#7a6a5a;--line:#e2d6c2;--bad:#b3261e}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,"Segoe UI",Tahoma,sans-serif;background:var(--off);color:var(--text)}
-header{background:var(--brown);color:#fff;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;padding:12px 16px;gap:8px;position:sticky;top:0;z-index:5}
-.brand{font-size:22px;font-weight:700}
-nav a{color:#fff;text-decoration:none;margin-inline-start:14px;font-size:15px}
-main{max-width:1100px;margin:0 auto;padding:16px}
-h1{color:var(--brown2);font-size:24px}h2{color:var(--brown2);font-size:19px;margin-top:0}
+header{background:var(--brown);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;z-index:5}
+header a{color:#fff;text-decoration:none;font-weight:700}
+nav a{margin-inline-start:12px;opacity:.9;font-size:14px}
+main{max-width:960px;margin:0 auto;padding:16px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
-.prod{text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block}
-.img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--beige);display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.prod{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;display:block}
+.img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--beige)}
 .pad{padding:10px}
 .price{color:var(--brown);font-weight:700}
-.muted{color:var(--muted);font-size:14px}
-.dots{display:flex;align-items:center;gap:4px;margin:8px 0;flex-wrap:wrap}
-.dot{width:16px;height:16px;border-radius:50%;background:var(--line);display:inline-block;cursor:pointer;flex:0 0 16px}
+.muted{color:var(--muted);font-size:13px}
+button,.btn{background:var(--brown);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+button:disabled{opacity:.5}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin:6px 0 12px;font:inherit}
+label{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.line{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
+.line.total{font-weight:700;border:0;padding-top:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;background:#fff}
+.chip.on{background:var(--brown);color:#fff;border-color:var(--brown)}
+.badge{display:inline-block;background:var(--beige);padding:4px 10px;border-radius:999px;font-size:12px}
+.note{background:#fff8e7;border:1px solid #f0e0b8;padding:10px;border-radius:10px;font-size:13px;margin:10px 0}
+.dots{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
 .dot.on{background:var(--brown)}
-.bar{flex:1;height:3px;background:var(--line);min-width:12px}
-input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--text);color-scheme:light;margin:4px 0 10px}
-label{font-size:14px;color:var(--muted)}
-button{background:var(--brown);color:#fff;border:0;border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer;margin:4px 4px 4px 0}
-button.ghost{background:var(--beige);color:var(--brown2)}
-button.danger{background:var(--bad)}
-button:disabled{opacity:.45;cursor:not-allowed}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.row>*{flex:1 1 140px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border:1px solid var(--brown);border-radius:20px;padding:6px 12px;cursor:pointer;background:#fff;color:var(--brown2)}
-.chip.on{background:var(--brown);color:#fff}
-.line{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line)}
-.total{font-size:18px;font-weight:700;color:var(--brown2)}
-.badge{display:inline-block;padding:3px 10px;border-radius:12px;background:var(--beige);font-size:13px}
-.note{background:var(--beige);padding:10px;border-radius:10px;font-size:14px}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--brown2);color:#fff;padding:10px 18px;border-radius:10px;display:none;z-index:9}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
+h1,h2{margin:0 0 12px}
+.admin-login{max-width:360px;margin:40px auto}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">Zstore</div>
+  <a href="#/">Zstore</a>
   <nav>
-    <a href="#/">الرئيسية</a>
-    <a href="#/track">تتبع الطلب</a>
-    <a href="#/cart">السلة (<span id="cc">0</span>)</a>
-    <a href="#/admin">الإدارة</a>
+    <a href="#/cart">السلة</a>
+    <a href="#/track">تتبع</a>
+    <a href="#/admin">إدارة</a>
   </nav>
 </header>
-<main id="app"><p class="muted">جاري التحميل…</p></main>
+<main id="app"></main>
 <div id="toast"></div>
-<script src="app.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = n => Number(n)||0;
+const money = n => (Math.round((Number(n)||0)*100)/100 + 0).toLocaleString('ar-EG') + ' جنيه';
+const arr = v => Array.isArray(v)?v:(typeof v==='string'?JSON.parse(v||'[]'):[]);
+const unitFor = (p, qty) => (qty > 1 && num(p.price2) > 0) ? num(p.price2) : num(p.price);
+const unitTotal = p => unitFor(p,1);
+const STATUS = {new:'جديد',awaiting_shipping:'بانتظار تحديد الشحن',awaiting_customer:'بانتظار تأكيد العميل',confirmed:'تم التأكيد',rejected:'مرفوض',preparing:'قيد التجهيز',shipped:'تم الشحن',completed:'مكتمل',cancelled:'ملغي'};
+const DELIVERY_FEE = 80;
+const S = {products:[],orders:[],cart:JSON.parse(localStorage.getItem('zs_cart')||'[]'),units:[],of:'',admin:false};
+
+async function api(path, opts={}) {
+  const r = await fetch(path, {headers:{'Content-Type':'application/json',...(opts.headers||{})}, ...opts, body: opts.body?JSON.stringify(opts.body):undefined});
+  const t = await r.text();
+  let d; try{d=JSON.parse(t)}catch{d={error:t||r.statusText}}
+  if(!r.ok) throw new Error(d.error||r.statusText);
+  return d;
+}
+function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',2500)}
+function saveCart(){localStorage.setItem('zs_cart',JSON.stringify(S.cart))}
+function cartQtyOf(pid){return S.cart.filter(i=>i.pid===pid).reduce((s,i)=>s+i.qty,0)}
+async function loadProducts(){ S.products = await api('/api/products'); }
+async function loadOrders(){ S.orders = await api('/api/orders'); }
+
+function breakdown(items, delivery=0){
+  const base = items.reduce((s,i)=>s+i.base*i.qty,0);
+  return {base, delivery, total: base+delivery};
+}
+function bdHtml(b){
+  return `<div class="line"><span>السعر الأساسي</span><span>${money(b.base)}</span></div>
+    <div class="line"><span>رسوم التوصيل</span><span>${money(b.delivery)}</span></div>
+    <div class="line total"><span>الإجمالي</span><span>${money(b.total)}</span></div>`;
+}
+function dotsHtml(id, stage, editable){
+  const labels=['استلام','تجهيز','شحن','تسليم'];
+  return `<div class="dots">${labels.map((l,i)=>`<span class="dot ${i<=stage?'on':''}" title="${l}" ${editable?`data-stage="${i}" data-oid="${esc(id)}"`:''}></span>`).join('')}</div><div class="muted">${labels.map((l,i)=>i<=stage?l:'').filter(Boolean).join(' → ')||'لم يبدأ بعد'}</div>`;
+}
+function statusBlock(o){ return `<h2>حالة الطلب</h2>${dotsHtml(o.id, o.shipping?.stage??-1, false)}`; }
+function derivedStatus(o){
+  const stage = o.shipping?.stage ?? -1;
+  if(o.status==='cancelled'||o.status==='rejected'||o.status==='completed') return o.status;
+  if(stage>=3) return 'completed';
+  if(stage>=2) return 'shipped';
+  if(stage>=1) return 'preparing';
+  return o.status;
+}
+
+function render(html){ $('#app').innerHTML = html; }
+
+async function viewHome(){
+  await loadProducts();
+  const ps=S.products.filter(p=>num(p.stock)>0);
+  const empty='لا توجد منتجات حالياً';
+  render(`<h1>المنتجات</h1>
+  ${ps.length?`<div class="grid">${ps.map(p=>`<a class="prod" href="#/p/${esc(p.id)}"><img class="img" src="${esc(p.image)}" alt="" onerror="this.style.visibility='hidden'"><div class="pad"><div>${esc(p.name)}</div><div class="price">${money(unitTotal(p))}</div></div></a>`).join('')}</div>`:`<div class="card muted">${empty}</div>`}`);
+}
+
+async function viewProduct(id){
+  await loadProducts();
+  const p=S.products.find(x=>x.id===id);
+  if(!p) return render('<div class="card">المنتج غير موجود</div>');
+  const chips=(list,key)=>list.map(c=>`<span class="chip" data-k="${key}" data-v="${esc(c)}">${esc(c)}</span>`).join('')||'<span class="muted">—</span>';
+  render(`<a href="#/">← رجوع</a><div class="card" style="margin-top:12px">
+  <img class="img" style="max-height:280px;object-fit:contain" src="${esc(p.image)}" onerror="this.style.display='none'">
+  <h1>${esc(p.name)}</h1>
+  <div class="price" style="font-size:22px">${money(unitTotal(p))}</div>
+  <p class="muted">${esc(p.description||'')}</p>
+  <label>اللون</label><div class="chips">${chips(p.colors,'color')}</div>
+  <label>المقاس</label><div class="chips">${chips(p.sizes,'size')}</div>
+  <label>الكمية</label><input type="number" id="qty" value="1" min="1" max="${num(p.stock)}">
+  <div class="muted">المتاح: ${num(p.stock)}</div>
+  <button data-act="add" data-id="${esc(p.id)}" ${num(p.stock)<1?'disabled':''}>أضف إلى السلة</button></div></div>`);
+  $$('.chip').forEach(el=>el.onclick=()=>{$$(`.chip[data-k="${el.dataset.k}"]`).forEach(x=>x.classList.remove('on'));el.classList.add('on')});
+  $('[data-act=add]').onclick=()=>addToCart(p);
+}
+function unitList(p,qty){
+  const colors=arr(p.colors), sizes=arr(p.sizes), out=[];
+  for(let i=0;i<qty;i++){
+    out.push({color:colors.length?(u.color||''):'', size:sizes.length?(u.size||''):''}); }
+  return out;
+}
+// fix unitList - simplified
+function getUnits(p,qty){
+  const colors=arr(p.colors), sizes=arr(p.sizes);
+  const selected={color:$('.chip[data-k=color].on')?.dataset.v||'', size:$('.chip[data-k=size].on')?.dataset.v||''};
+  return Array.from({length:qty},()=>({color:colors.length?selected.color:'', size:sizes.length?selected.size:''}));
+}
+function addToCart(p){
+  const qty=Math.max(1, Math.floor(num($('#qty')?.value||1)));
+  if(qty<1) return toast('الكمية غير صحيحة');
+  if(cartQtyOf(p.id)+qty>num(p.stock)) return toast('الكمية أكبر من المتاح');
+  const units=getUnits(p,qty), colors=arr(p.colors), sizes=arr(p.sizes);
+  if(units.some(u=>(colors.length&&!u.color)||(sizes.length&&!u.size))) return toast('اختر اللون والمقاس لكل قطعة');
+  for(const u of units) S.cart.push({pid:p.id,name:p.name,image:p.image||'',color:u.color,size:u.size,qty:1});
+  S.units=[]; saveCart(); toast('تمت الإضافة للسلة'); location.hash='#/cart';
+}
+
+function viewCart(){
+  const rows = S.cart.map((i,idx)=>{
+    const p=S.products.find(x=>x.id===i.pid);
+    const unit=p?unitFor(p, cartQtyOf(i.pid)):0;
+    const line=unit*i.qty;
+    return `<div class="card" style="display:flex;gap:10px;align-items:center">
+      <img src="${esc(i.image)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px" onerror="this.style.visibility='hidden'">
+      <div style="flex:1"><strong>${esc(i.name)}</strong>
+        <div class="muted">${[i.color,i.size].filter(Boolean).join(' / ')}</div>
+        ${p?`<div class="muted">سعر الوحدة ${money(unit)}</div>`:'<div style="color:var(--bad)">غير متاح</div>'}</div>
+      <div class="price" style="flex:1 1 110px">${money(line)}</div>
+      <button data-rm="${idx}" style="background:var(--bad)">حذف</button></div>`;
+  }).join('')||'<div class="card muted">السلة فاضية</div>';
+  const total=S.cart.reduce((s,i)=>{const p=S.products.find(x=>x.id===i.pid);return s+(p?unitFor(p,cartQtyOf(i.pid))*i.qty:0)},0);
+  render(`<h1>السلة</h1>${rows}<div class="card"><div class="line total"><span>المجموع قبل الشحن</span><span>${money(total)}</span></div>
+    <p class="muted">رسوم التوصيل ثابتة ${DELIVERY_FEE} ج.م.</p><button data-act="checkout">إتمام الطلب</button></div>`);
+  $$('[data-rm]').forEach(b=>b.onclick=()=>{S.cart.splice(+b.dataset.rm,1);saveCart();viewCart()});
+  $('[data-act=checkout]')?.addEventListener('click',()=>location.hash='#/checkout');
+}
+
+async function viewCheckout(){
+  await loadProducts();
+  const items=[];
+  for(const i of S.cart){
+    const p=S.products.find(x=>x.id===i.pid); if(!p) continue;
+    items.push({pid:p.id,name:p.name,image:p.image||'',color:i.color,size:i.size,qty:i.qty,base:unitFor(p,cartQtyOf(p.id)),stock:num(p.stock)});
+  }
+  render(`<h1>إتمام الطلب</h1><div class="row">
+    <div class="card" style="flex:1 1 280px"><h2>بيانات العميل</h2>
+      <label>الاسم *</label><input id="f_name">
+      <label>الهاتف *</label><input id="f_phone" placeholder="01xxxxxxxxx">
+      <label>المحافظة *</label><input id="f_city">
+      <label>المنطقة *</label><input id="f_area">
+      <label>العنوان *</label><textarea id="f_address" rows="2"></textarea>
+      <label>ملاحظات</label><textarea id="f_notes" rows="2"></textarea>
+      <label><input type="checkbox" id="f_ok"> أؤكد صحة البيانات</label>
+      <button id="f_submit">تأكيد الطلب</button></div>
+    <div class="card" style="flex:1 1 260px"><h2>ملخص السعر</h2>${bdHtml(breakdown(items,DELIVERY_FEE))}
+      <p class="note">رسوم التوصيل ثابتة ${DELIVERY_FEE} ج.م لأي مكان.</p></div></div>`);
+  $('#f_submit').onclick=async()=>{
+    const v={name:$('#f_name').value.trim(),phone:$('#f_phone').value.trim(),city:$('#f_city').value.trim(),area:$('#f_area').value.trim(),address:$('#f_address').value.trim(),notes:$('#f_notes').value.trim()};
+    if(!v.name||!v.phone||!v.city||!v.area||!v.address) return toast('أكمل الحقول المطلوبة');
+    if(!/^\+?[0-9\s]{8,16}$/.test(v.phone)) return toast('رقم الهاتف غير صحيح');
+    if(!$('#f_ok').checked) return toast('لازم تأكد الطلب الأول');
+    try{
+      if(!items.length) return toast('السلة فاضية أو فيها منتجات غير متاحة');
+      for(const i of items) if(i.qty>i.stock) return toast(`المتاح من ${i.name} ${i.stock} فقط`);
+      const order=await api('/api/orders',{method:'POST',body:{
+        customer:v, phone:v.phone.replace(/\s/g,''), items:items.map(({stock,...r})=>r),
+        breakdown:breakdown(items,DELIVERY_FEE), shipping:{stage:-1}, status:'new'
+      }});
+      S.cart=[]; saveCart();
+      location.hash='#/order/'+order.id;
+    }catch(e){toast(e.message)}
+  };
+}
+
+async function viewTrack(){
+  render(`<h1>تتبع الطلب</h1><div class="card">
+    <label>رقم الطلب أو رقم الهاتف</label><input id="t_q" placeholder="ZS-123456 أو 01xxxxxxxx">
+    <button id="t_go">بحث</button><div id="t_res" style="margin-top:12px"></div></div>`);
+  $('#t_go').onclick=async()=>{
+    const q=$('#t_q').value.trim(); if(!q) return;
+    try{
+      const isCode=/^ZS-/i.test(q);
+      const docs=await api('/api/orders?'+(isCode?'orderNo='+encodeURIComponent(q.toUpperCase()):'phone='+encodeURIComponent(q)));
+      if(!docs.length) return $('#t_res').innerHTML='<div class="muted">لا توجد نتائج</div>';
+      $('#t_res').innerHTML=docs.map(o=>`<div class="card"><h2>طلب ${esc(o.orderNo)}</h2>${statusBlock(o)}
+        <a href="#/order/${esc(o.id)}">تفاصيل</a></div>`).join('');
+    }catch(e){toast(e.message)}
+  };
+}
+
+async function viewOrder(id){
+  try{
+    const o=await api('/api/orders?id='+encodeURIComponent(id));
+    const LBL=STATUS;
+    const items=(o.items||[]).map(i=>`<div class="line"><span>${esc(i.name)} ${[i.color,i.size].filter(Boolean).join('/')} × ${i.qty}</span><span>${money((i.base||0)*i.qty)}</span></div>`).join('');
+    let action='';
+    if(o.status==='new'||o.status==='awaiting_shipping') action='<div class="note">طلبك اتسجل بنجاح، وهيتم تأكيده قريباً.</div>';
+    render(`<h1>طلب ${esc(o.orderNo)}</h1><div class="card"><span class="badge">${LBL[derivedStatus(o)]||o.status}</span>
+      <div style="margin-top:12px">${items}</div><div style="margin-top:8px">${bdHtml(o.breakdown||{})}</div>
+      ${statusBlock(o)}${action}
+      <p class="muted">${esc(o.customer?.name||'')} — ${esc(o.customer?.phone||o.phone||'')}</p></div>`);
+  }catch(e){render('<div class="card">'+esc(e.message)+'</div>')}
+}
+
+// ===== Admin =====
+async function viewAdmin(){
+  if(!S.admin){
+    render(`<div class="admin-login card"><h1>دخول الإدارة</h1>
+      <label>كلمة المرور</label><input type="password" id="pw">
+      <button id="login">دخول</button></div>`);
+    $('#login').onclick=async()=>{
+      try{
+        await api('/api/admin',{method:'POST',body:{action:'login',password:$('#pw').value}});
+        S.admin=true; localStorage.setItem('zs_admin','1'); viewAdmin();
+      }catch(e){toast(e.message)}
+    };
+    return;
+  }
+  await Promise.all([loadProducts(), loadOrders()]);
+  const tabs=`<div class="row" style="margin-bottom:12px">
+    <button data-tab="orders" class="${S.atab!=='products'?'':'" style="opacity:.6"}'}">الطلبات</button>
+    <button data-tab="products">المنتجات</button>
+    <button data-tab="settings">إعدادات</button>
+    <button id="logout" style="background:var(--bad)">خروج</button></div>`;
+  if(S.atab==='products') return renderAdminProducts(tabs);
+  if(S.atab==='settings') return renderAdminSettings(tabs);
+  return renderAdminOrders(tabs);
+}
+function renderAdminOrders(tabs){
+  const q=(S.oq||'').toLowerCase();
+  const view=S.orders.filter(o=>(!S.of||o.status===S.of)&&(!q||[o.orderNo,o.customer?.name,o.customer?.phone].some(x=>String(x||'').includes(q))));
+  render(`<h1>الإدارة</h1>${tabs}
+    <div class="row"><input id="oq" placeholder="بحث..." value="${esc(S.oq||'')}" style="flex:1">
+    <select id="of"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${S.of===k?'selected':''}>${v}</option>`).join('')}</select></div>
+    ${view.map(o=>orderCard(o)).join('')||'<div class="card muted">لا طلبات</div>'}`);
+  $('#oq').onchange=e=>{S.oq=e.target.value;renderAdminOrders(tabs)};
+  $('#of').onchange=e=>{S.of=e.target.value;renderAdminOrders(tabs)};
+  $('#logout').onclick=()=>{S.admin=false;localStorage.removeItem('zs_admin');viewAdmin()};
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{S.atab=b.dataset.tab;viewAdmin()});
+  $$('[data-stage]').forEach(d=>d.onclick=async()=>{
+    try{
+      await api('/api/orders',{method:'PATCH',body:{id:d.dataset.oid,shipping:{stage:+d.dataset.stage}}});
+      await loadOrders(); viewAdmin();
+    }catch(e){toast(e.message)}
+  });
+  $$('[data-st]').forEach(b=>b.onclick=async()=>{
+    try{await api('/api/orders',{method:'PATCH',body:{id:b.dataset.id,status:b.dataset.st}});await loadOrders();viewAdmin()}catch(e){toast(e.message)}
+  });
+}
+function orderCard(o){
+  const c=o.customer||{}, b=o.breakdown||{};
+  return `<div class="card"><details>
+    <summary class="row" style="cursor:pointer;align-items:center"><strong>${esc(o.orderNo)}</strong>
+      <span class="badge">${STATUS[derivedStatus(o)]||o.status}</span>
+      <span class="muted">${esc(c.name||'')} ${esc(c.phone||o.phone||'')}</span>
+      <span class="price">${money(b.total||0)}</span></summary>
+    <div style="margin-top:10px">${(o.items||[]).map(i=>`<div class="line"><span>${esc(i.name)} ${[i.color,i.size].filter(Boolean).join('/')} ×${i.qty}</span><span>${money((i.base||0)*i.qty)}</span></div>`).join('')}
+    ${bdHtml(b)}
+    <p class="muted">${esc(c.city||'')} / ${esc(c.area||'')} — ${esc(c.address||'')}</p>
+    <div style="margin-top:10px"><strong>تتبع الشحنة</strong>${dotsHtml(o.id,o.shipping?.stage??-1,true)}</div>
+    <div class="row" style="margin-top:8px">
+      <button data-st="confirmed" data-id="${esc(o.id)}">تأكيد</button>
+      <button data-st="preparing" data-id="${esc(o.id)}">تجهيز</button>
+      <button data-st="shipped" data-id="${esc(o.id)}">شحن</button>
+      <button data-st="completed" data-id="${esc(o.id)}">مكتمل</button>
+      <button data-st="cancelled" data-id="${esc(o.id)}" style="background:var(--bad)">إلغاء</button>
+    </div></div></details></div>`;
+}
+function renderAdminProducts(tabs){
+  const p=S.edit||{};
+  render(`<h1>الإدارة</h1>${tabs}
+    <div class="card"><h2>${p.id?'تعديل':'إضافة'} منتج</h2>
+    <label>الاسم</label><input id="p_name" value="${esc(p.name||'')}">
+    <label>الوصف</label><textarea id="p_desc">${esc(p.description||'')}</textarea>
+    <label>رابط الصورة</label><input id="p_img" value="${esc(p.image||'')}">
+    <div class="row"><div style="flex:1"><label>السعر</label><input type="number" id="p_price" value="${p.price??''}"></div>
+      <div style="flex:1"><label>سعر أكثر من قطعة</label><input type="number" id="p_price2" value="${p.price2??''}"></div></div>
+    <div class="row"><div style="flex:1"><label>المخزون</label><input type="number" id="p_stock" value="${p.stock??0}"></div></div>
+    <label>الألوان (فاصلة)</label><input id="p_colors" value="${esc(arr(p.colors).join(', '))}">
+    <label>المقاسات (فاصلة)</label><input id="p_sizes" value="${esc(arr(p.sizes).join(', '))}">
+    <button id="p_save">حفظ</button> ${p.id?`<button id="p_cancel">إلغاء</button>`:''}</div>
+    <div class="card">${S.products.map(x=>`<div class="line"><span>${esc(x.name)} — ${money(unitTotal(x))} — مخزون ${num(x.stock)}</span>
+      <span><button data-ed="${esc(x.id)}">تعديل</button> <button data-del="${esc(x.id)}" style="background:var(--bad)">حذف</button></span></div>`).join('')||'<div class="muted">لا منتجات</div>'}</div>`);
+  $('#logout').onclick=()=>{S.admin=false;localStorage.removeItem('zs_admin');viewAdmin()};
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{S.atab=b.dataset.tab;viewAdmin()});
+  $('#p_save').onclick=async()=>{
+    const body={id:p.id,name:$('#p_name').value.trim(),description:$('#p_desc').value.trim(),image:$('#p_img').value.trim(),
+      price:num($('#p_price').value),price2:num($('#p_price2').value),stock:Math.floor(num($('#p_stock').value)),
+      colors:$('#p_colors').value.split(',').map(s=>s.trim()).filter(Boolean),
+      sizes:$('#p_sizes').value.split(',').map(s=>s.trim()).filter(Boolean)};
+    if(!body.name||!body.price) return toast('الاسم والسعر مطلوبان');
+    try{
+      if(body.id) await api('/api/products',{method:'PUT',body});
+      else await api('/api/products',{method:'POST',body});
+      S.edit=null; await loadProducts(); viewAdmin();
+    }catch(e){toast(e.message)}
+  };
+  $('#p_cancel')?.addEventListener('click',()=>{S.edit=null;viewAdmin()});
+  $$('[data-ed]').forEach(b=>b.onclick=()=>{S.edit=S.products.find(x=>x.id===b.dataset.ed);viewAdmin()});
+  $$('[data-del]').forEach(b=>b.onclick=async()=>{
+    if(!confirm('حذف؟')) return;
+    try{await api('/api/products',{method:'DELETE',body:{id:b.dataset.del}});await loadProducts();viewAdmin()}catch(e){toast(e.message)}
+  });
+}
+function renderAdminSettings(tabs){
+  render(`<h1>الإدارة</h1>${tabs}<div class="card"><h2>تغيير كلمة المرور</h2>
+    <label>الحالية</label><input type="password" id="old">
+    <label>الجديدة</label><input type="password" id="npw">
+    <button id="cpw">حفظ</button></div>`);
+  $('#logout').onclick=()=>{S.admin=false;localStorage.removeItem('zs_admin');viewAdmin()};
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{S.atab=b.dataset.tab;viewAdmin()});
+  $('#cpw').onclick=async()=>{
+    try{await api('/api/admin',{method:'POST',body:{action:'changepw',oldPassword:$('#old').value,newPassword:$('#npw').value}});toast('تم');}
+    catch(e){toast(e.message)}
+  };
+}
+
+function route(){
+  const h=location.hash.slice(1)||'/';
+  if(h==='/'||h==='') return viewHome();
+  if(h.startsWith('/p/')) return viewProduct(h.slice(3));
+  if(h==='/cart') return viewCart();
+  if(h==='/checkout') return viewCheckout();
+  if(h==='/track') return viewTrack();
+  if(h.startsWith('/order/')) return viewOrder(h.slice(7));
+  if(h==='/admin'||h.startsWith('/admin')) { if(localStorage.getItem('zs_admin')==='1') S.admin=true; return viewAdmin(); }
+  viewHome();
+}
+window.addEventListener('hashchange', route);
+route();
+})();
+
+</script>
 </body>
 </html>
